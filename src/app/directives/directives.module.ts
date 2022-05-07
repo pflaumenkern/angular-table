@@ -6,6 +6,9 @@ import { DynamicHostDirective } from './dynamic-host.directive';
   declarations: [
     DynamicHostDirective
   ],
+  exports: [
+    DynamicHostDirective
+  ],
   imports: [
     CommonModule
   ]

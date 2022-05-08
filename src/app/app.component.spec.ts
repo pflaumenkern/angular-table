@@ -1,31 +1,53 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatCardModule } from "@angular/material/card";
+import { TableModule } from "./lib/table/table.module";
+import { ExampleCellsModule } from "./example-cells/example-cells.module";
+import { MatChipsModule } from "@angular/material/chips";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { By } from "@angular/platform-browser";
 
 describe('AppComponent', () => {
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
         AppComponent
       ],
+      imports: [
+        NoopAnimationsModule,
+        MatToolbarModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatChipsModule,
+        TableModule,
+        ExampleCellsModule
+      ]
     }).compileComponents();
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it(`should have as title 'angular-table'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('angular-table');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('angular-table app is running!');
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+    expect(component.dataSource).toBeDefined();
+    expect(component.tableConfig).toBeDefined();
+    expect(component.elementChanges).toEqual([]);
+  });
+
+  it('should collect element changes', () => {
+    const model = { id: 1, firstName: 'FN', lastName: 'LN' };
+    const table = fixture.debugElement.query(By.css('app-table')).componentInstance;
+    table.elementChange.emit(model);
+
+    expect(component.elementChanges).toEqual([JSON.stringify(model)]);
   });
 });

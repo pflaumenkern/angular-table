@@ -1,0 +1,11 @@
+.container {
+  margin: 1em;
+}
+
+.container__item {
+  margin-bottom: 1em;
+}
+
+.container__item--width-full {
+  width: 100%;
+}

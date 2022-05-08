@@ -31,7 +31,7 @@ class TestDataChangeHostComponent implements DynamicHostComponent {
  * Test container for {@link DynamicHostDirective}.
  */
 @Component({
-  selector: 'app-dynamic-host-container',
+  selector: 'app-test-dynamic-host-container',
   template: `
     <ng-template appDynamicHost [dynamicHostConfig]="hostConfig"></ng-template>
     <ng-template appDynamicHost

@@ -83,6 +83,9 @@ The [ExampleCellsModule](src/app/example-cells/example-cells.module.ts) contains
 time of writing this is a simple readonly and an editable example cell. These cells illustrate the mutable part, which 
 may be implemented according to business needs.
 
+The [ExampleFiltersModule](src/app/example-filters/example-filters.module.ts) contains example filter implementations. 
+Currently, this is only a simple text filter showing how filtering may be enabled.
+
 ## To Do's
 
 * Support initial filtering

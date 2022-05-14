@@ -8,6 +8,8 @@ import { ExampleCellsModule } from "./example-cells/example-cells.module";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { By } from "@angular/platform-browser";
+import { MatDividerModule } from "@angular/material/divider";
+import { ExampleFiltersModule } from "./example-filters/example-filters.module";
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -20,12 +22,14 @@ describe('AppComponent', () => {
       ],
       imports: [
         NoopAnimationsModule,
-        MatToolbarModule,
         MatCardModule,
-        MatFormFieldModule,
         MatChipsModule,
+        MatDividerModule,
+        MatFormFieldModule,
+        MatToolbarModule,
         TableModule,
-        ExampleCellsModule
+        ExampleCellsModule,
+        ExampleFiltersModule
       ]
     }).compileComponents();
   });
@@ -45,9 +49,16 @@ describe('AppComponent', () => {
 
   it('should collect element changes', () => {
     const model = { id: 1, firstName: 'FN', lastName: 'LN' };
-    const table = fixture.debugElement.query(By.css('app-table')).componentInstance;
+    const table = fixture.debugElement.query(By.css('#editableTable')).componentInstance;
     table.elementChange.emit(model);
 
     expect(component.elementChanges).toEqual([JSON.stringify(model)]);
+  });
+
+  it('should collect filter changes', () => {
+    const table = fixture.debugElement.query(By.css('#filterableTable')).componentInstance;
+    table.filterChange.emit('Filter changed');
+
+    expect(component.dataSourceWithFilter.filter).toEqual('Filter changed');
   });
 });

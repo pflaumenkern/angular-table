@@ -1,9 +1,15 @@
 <table mat-table [dataSource]="dataSource" class="table" aria-label="Table using dynamic component loading">
   <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
-    <th mat-header-cell *matHeaderCellDef scope="col">{{ getColumnTitleFor(column) }}</th>
+    <th mat-header-cell *matHeaderCellDef scope="col">
+      {{ getColumnTitleFor(column) }}
+      <!-- Example of a cell filter placed in the table header, same principle as the cell component -->
+      <ng-template appDynamicHost
+                   [dynamicHostConfig]="createFilterHostConfigFor(column)"
+                   (dataChange)="filterChange.emit($event)"></ng-template>
+    </th>
     <td mat-cell *matCellDef="let element">
       <ng-template appDynamicHost
-                   [dynamicHostConfig]="createHostConfigFor(column, element)"
+                   [dynamicHostConfig]="createCellHostConfigFor(column, element)"
                    (dataChange)="elementChange.emit(element)"></ng-template>
     </td>
   </ng-container>

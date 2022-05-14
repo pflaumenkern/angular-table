@@ -1,5 +1,6 @@
 import { Type } from "@angular/core";
 import { CellComponent } from "./cells/cell.component";
+import { FilterComponent } from "./filters/filter.component";
 
 export type ColumnId = string;
 
@@ -19,6 +20,10 @@ export interface ColumnConfig {
    * Dynamically created cell component.
    */
   cellComponent: Type<CellComponent>;
+  /**
+   * Dynamically created filter component.
+   */
+  filterComponent?: Type<FilterComponent>;
 }
 
 /**

@@ -8,6 +8,8 @@ import { MatCardModule } from "@angular/material/card";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatDividerModule } from "@angular/material/divider";
+import { ExampleFiltersModule } from "./example-filters/example-filters.module";
 
 @NgModule({
   declarations: [
@@ -16,12 +18,14 @@ import { MatFormFieldModule } from "@angular/material/form-field";
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    MatToolbarModule,
     MatCardModule,
+    MatChipsModule,
+    MatDividerModule,
+    MatFormFieldModule,
+    MatToolbarModule,
     TableModule,
     ExampleCellsModule,
-    MatChipsModule,
-    MatFormFieldModule
+    ExampleFiltersModule
   ],
   providers: [],
   bootstrap: [AppComponent]

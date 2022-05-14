@@ -6,6 +6,7 @@ import { DirectivesModule } from "../directives/directives.module";
 import { CellComponent } from "./cells/cell.component";
 import { EditCellComponent } from "./cells/edit-cell.component";
 import { By } from "@angular/platform-browser";
+import { FilterComponent } from "./filters/filter.component";
 
 @Component({
   selector: 'app-test-readonly-cell',
@@ -22,6 +23,16 @@ class TestReadonlyCellComponent extends CellComponent {
   template: '<span>{{ getCellValue() }}</span>'
 })
 class TestEditableCellComponent extends EditCellComponent {
+  constructor() {
+    super();
+  }
+}
+
+@Component({
+  selector: 'app-test-filter',
+  template: '<input />'
+})
+class TestFilterComponent extends FilterComponent {
   constructor() {
     super();
   }
@@ -70,20 +81,51 @@ describe('TableComponent', () => {
     });
   });
 
-  describe('DynamicHostConfig', () => {
+  describe('Cell DynamicHostConfig', () => {
     it('should return value', () => {
       component.config = {
         columns: [
           { id: 'colId', title: 'Test', cellComponent: CellComponent }
         ]
       };
-      const actual = component.createHostConfigFor('colId', 'Test');
+      const actual = component.createCellHostConfigFor('colId', 'Test');
 
       expect(actual).toBeDefined();
     });
 
     it('should return undefined, if column config missing', () => {
-      const actual = component.createHostConfigFor('colId', 'Test');
+      const actual = component.createCellHostConfigFor('colId', 'Test');
+
+      expect(actual).toBeUndefined();
+    });
+  });
+
+  describe('Filter DynamicHostConfig', () => {
+    it('should return value', () => {
+      component.config = {
+        columns: [
+          { id: 'colId', title: 'Test', cellComponent: CellComponent, filterComponent: FilterComponent }
+        ]
+      };
+      const actual = component.createFilterHostConfigFor('colId');
+
+      expect(actual).toBeDefined();
+    });
+
+    it('should return undefined, if column config missing', () => {
+      const actual = component.createFilterHostConfigFor('colId');
+
+      expect(actual).toBeUndefined();
+    });
+
+    it('should return undefined, if filterComponent missing', () => {
+      component.config = {
+        columns: [
+          { id: 'colId', title: 'Test', cellComponent: CellComponent }
+        ]
+      };
+
+      const actual = component.createFilterHostConfigFor('colId');
 
       expect(actual).toBeUndefined();
     });
@@ -95,6 +137,12 @@ describe('TableComponent', () => {
         columns: [
           { id: 'readonly', title: 'Readonly Cell', cellComponent: TestReadonlyCellComponent },
           { id: 'editable', title: 'Editable Cell', cellComponent: TestEditableCellComponent },
+          {
+            id: 'filter',
+            title: 'Filter Cell',
+            cellComponent: TestReadonlyCellComponent,
+            filterComponent: TestFilterComponent
+          },
         ]
       };
       component.dataSource = new MatTableDataSource([{ readonly: 'Readonly Value', editable: 'Editable Value' }]);
@@ -104,12 +152,12 @@ describe('TableComponent', () => {
     });
 
     it('should show headers and cells', () => {
-      const toTextContent = (debugElement: DebugElement) => debugElement.nativeElement.textContent;
+      const toTextContent = (debugElement: DebugElement) => debugElement.nativeElement.textContent.trim();
       const headers = fixture.debugElement.queryAll(By.css('th')).map(toTextContent);
       const cells = fixture.debugElement.queryAll(By.css('td')).map(toTextContent);
 
-      expect(headers).toEqual(['Readonly Cell', 'Editable Cell']);
-      expect(cells).toEqual(['Readonly Value', 'Editable Value']);
+      expect(headers).toEqual(['Readonly Cell', 'Editable Cell', 'Filter Cell']);
+      expect(cells).toEqual(['Readonly Value', 'Editable Value', '']);
     });
 
     it('should forward element change', () => {
@@ -120,6 +168,16 @@ describe('TableComponent', () => {
       editableCell.updateAndPropagate('New value');
 
       expect(elementChangeTriggered).toBeTrue();
+    });
+
+    it('should forward filter change', () => {
+      let filterChangeTriggered = false;
+      component.filterChange.subscribe((value) => filterChangeTriggered = value != null);
+
+      const filter = fixture.debugElement.query(By.css('app-test-filter')).componentInstance;
+      filter.dataChange.emit('Filter value');
+
+      expect(filterChangeTriggered).toBeTrue();
     });
   });
 });

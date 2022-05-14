@@ -18,6 +18,8 @@ export class TableComponent<T> implements OnInit {
   public dataSource: DataSource<T> = new MatTableDataSource<T>();
   @Output()
   public readonly elementChange: EventEmitter<T> = new EventEmitter<T>();
+  @Output()
+  public readonly filterChange: EventEmitter<any> = new EventEmitter<any>();
 
   public displayedColumns: Array<ColumnId> = [];
 
@@ -34,16 +36,28 @@ export class TableComponent<T> implements OnInit {
   }
 
   /**
-   * Create the host config by column id and element.
+   * Create the cell host config by column id and element.
    * @param id
    * @param element
    */
-  createHostConfigFor(id: ColumnId, element: any): DynamicHostConfig | undefined {
+  createCellHostConfigFor(id: ColumnId, element: any): DynamicHostConfig | undefined {
     const config = this.findColumnConfigBy(id);
     const component = config?.cellComponent;
     if (config && component) {
       const data: CellData = { config, model: element };
       return { component, data };
+    }
+    return undefined;
+  }
+
+  /**
+   * Create the filter host config by column id.
+   * @param id
+   */
+  createFilterHostConfigFor(id: ColumnId): DynamicHostConfig | undefined {
+    const config = this.findColumnConfigBy(id);
+    if (config && config.filterComponent) {
+      return { component: config.filterComponent, data: config };
     }
     return undefined;
   }

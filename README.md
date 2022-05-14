@@ -85,6 +85,5 @@ may be implemented according to business needs.
 
 ## To Do's
 
-* Support column filters
 * Support initial filtering
 * Support initial sorting

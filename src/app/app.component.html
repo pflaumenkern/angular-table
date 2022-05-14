@@ -1,9 +1,22 @@
 <mat-toolbar color="primary">Examples: Table implementation using dynamic component loading</mat-toolbar>
 <div class="container">
   <mat-card class="container__item">
+    <mat-card-header>Table with filter in table header</mat-card-header>
+    <mat-card-content>
+      <app-table id="filterableTable"
+                 [config]="tableConfigWithFilter"
+                 [dataSource]="dataSourceWithFilter"
+                 (filterChange)="onFilterChange($event)"></app-table>
+    </mat-card-content>
+  </mat-card>
+  <mat-divider class="container__item"></mat-divider>
+  <mat-card class="container__item">
     <mat-card-header>Table with readonly and editable cells</mat-card-header>
     <mat-card-content>
-      <app-table [config]="tableConfig" [dataSource]="dataSource" (elementChange)="onElementChange($event)"></app-table>
+      <app-table id="editableTable"
+                 [config]="tableConfig"
+                 [dataSource]="dataSource"
+                 (elementChange)="onElementChange($event)"></app-table>
     </mat-card-content>
   </mat-card>
   <mat-form-field class="container__item container__item--width-full" appearance="fill">
